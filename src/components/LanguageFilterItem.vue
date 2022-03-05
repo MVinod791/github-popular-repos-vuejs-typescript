@@ -1,6 +1,6 @@
 <template>
     <li>
-      <button type="button"  class="button"  @click.prevent="$emit('show-languages',languages.id)">
+      <button type="button"  class="button"   @click.prevent="$emit('show-languages',languages.id)">
           {{languages.language}}
       </button>
     </li>
@@ -16,6 +16,7 @@ export default defineComponent({
             required:true,
             type:Object as PropType<LanguageFilterData>
         },
+        
         
     },
     

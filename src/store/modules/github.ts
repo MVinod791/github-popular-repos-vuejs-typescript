@@ -10,42 +10,61 @@ export type ItemData={
     avatar_url:string
   }
 
+//   export type Status={
+//       loadingStatus:false
+//   }
+
 export type State={
-    popularRepos:ItemData[]
+    popularRepos:ItemData[],
+    loadingStatus:boolean
 }
 
 const state:State={
-    popularRepos:[]
+    popularRepos:[],
+    loadingStatus:false
 };
 
 export type Getters={
-    allGithubRepos(state:State):void
+    allGithubRepos(state:State):void,
+    loadingStatus(state:State):void
 }
 
 const getters:Getters={
-    allGithubRepos:(state)=>state.popularRepos
+    allGithubRepos:(state)=>state.popularRepos,
+    loadingStatus:(state)=>state.loadingStatus
 };
 
 const actions={
-    async fetchRepos({commit}:any){
-        const response=await fetch('https://apis.ccbp.in/popular-repos')
-        const data=await response.json()
-        console.log(data)
-        commit('setPopularRepos',data.popular_repos)
-    },
-    async filterRepos({commit}:any,term:OrderLang){
+    async fetchRepos({commit}:any,term:OrderLang){
+        commit('loadingStatus',true)
+        //const response=await fetch('https://apis.ccbp.in/popular-repos')
         const response=await fetch(`https://apis.ccbp.in/popular-repos?language=${term}`)
         const data=await response.json()
+        //console.log(data)
         commit('setPopularRepos',data.popular_repos)
-    }
+        commit('loadingStatus',false)
+        
+    },
+    // async filterRepos({commit}:any,term:OrderLang){
+    //     commit('loadingStatus',true)
+    //     const response=await fetch(`https://apis.ccbp.in/popular-repos?language=${term}`)
+    //     const data=await response.json()
+    //     commit('setPopularRepos',data.popular_repos)
+    //     commit('loadingStatus',false)
+    // }
 };
 
 export type Mutations={
     setPopularRepos(state:State,popularRepos:ItemData[]):void
+    loadingStatus(state:State,newLoadingStatus:boolean):void
+    
 }
 
 const mutations:Mutations={
-    setPopularRepos:(state,popularRepos)=>state.popularRepos=popularRepos
+    setPopularRepos:(state,popularRepos)=>state.popularRepos=popularRepos,
+    loadingStatus(state,newLoadingStatus){
+        state.loadingStatus=newLoadingStatus
+    }
 };
 
 export default({

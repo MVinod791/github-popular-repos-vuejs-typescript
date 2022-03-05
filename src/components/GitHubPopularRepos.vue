@@ -7,13 +7,15 @@
                     v-for="languages in languageFiltersData" 
                     :key="languages.id" 
                     :languages="languages"
-                    :active="active"
+                    
                     @show-languages="filterLanguages"
                 />
             </ul>
-         
-            <ul class="repo-list">
-                <li v-for="repos in allGithubRepos" :key="repos.id">
+            <div v-if="loadingStatus" class="loading-div">
+                <LoaderSpinner/>
+            </div>   
+            <ul v-else class="repo-list">
+                <li v-for="repos in allGithubRepos" :key="repos">
                     <RepoItems :repos="repos"/>
                 </li>
             </ul>
@@ -34,12 +36,15 @@ import OrderLang  from '../types/OrderLang'
 
 import store from '@/store'
 
+import LoaderSpinner from './LoaderSpinner.vue'
+import FailureVuew from './FailureView.vue'
 
 export default defineComponent({
     name:'GitHubPopularRepos',
     components:{
         LanguageFilterItem,
-        RepoItems
+        RepoItems,
+       LoaderSpinner,FailureVuew
     },
     setup() {
         
@@ -54,22 +59,22 @@ export default defineComponent({
         const active=ref<boolean>(false)
 
         const filterLanguages=(term:OrderLang)=>{
-            active.value=!active.value
-            store.dispatch('filterRepos',term)
+            console.log(term)
+            store.dispatch('fetchRepos',term)
         }        
 
         const allGithubRepos=computed(()=>store.getters.allGithubRepos)
 
+        const loadingStatus=computed(()=>store.getters.loadingStatus)
+
         const fetchRepos=()=>{
-                
                 store.dispatch('fetchRepos')
         }
 
-        return {languageFiltersData,fetchRepos,allGithubRepos,filterLanguages,active}
+        return {languageFiltersData,fetchRepos,allGithubRepos,filterLanguages,loadingStatus}
     },
     
     created(){
-        
         this.fetchRepos()
     }
 

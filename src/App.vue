@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="app">  
       <GitHubPopularRepos/>
   </div>
 </template>
@@ -8,10 +8,14 @@
 import { defineComponent } from 'vue';
 import GitHubPopularRepos from './components/GitHubPopularRepos.vue'
 
+
+
+
 export default defineComponent({
   name: 'App',
   components: {
-    GitHubPopularRepos
+    GitHubPopularRepos,
+  
   }
 });
 </script>
