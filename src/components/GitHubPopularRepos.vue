@@ -19,6 +19,9 @@
                     <RepoItems :repos="repos" />
                 </li>
             </ul>
+            <div v-show="failureStatus">
+                <FailureView/>
+            </div>
         </div>
     </div>
 
@@ -37,7 +40,7 @@ import OrderLang  from '../types/OrderLang'
 import store from '@/store'
 
 import LoaderSpinner from './LoaderSpinner.vue'
-
+import FailureView from './FailureView.vue'
 
 export default defineComponent({
     name:'GitHubPopularRepos',
@@ -45,6 +48,7 @@ export default defineComponent({
         LanguageFilterItem,
         RepoItems,
         LoaderSpinner,
+        FailureView
     },
     setup() {
         
@@ -68,11 +72,13 @@ export default defineComponent({
 
         const loadingStatus=computed(()=>store.getters.loadingStatus)
 
+        const failureStatus=computed(()=>store.getters.failureStatus)
+
         const fetchRepos=()=>{
                 store.dispatch('fetchRepos')
         }
 
-        return {languageFiltersData,fetchRepos,allGithubRepos,filterLanguages,loadingStatus,isActive}
+        return {languageFiltersData,fetchRepos,allGithubRepos,filterLanguages,loadingStatus,isActive,failureStatus}
     },
     
     created(){
@@ -107,6 +113,8 @@ body {
   align-items: center;
   width: 100%;
   max-width: 1100px;
+  height: 100vh;
+  min-height: 100vh;
 }
 .filter-list {
   display: flex;

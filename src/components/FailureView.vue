@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="failure-container">
       <img
         src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
         alt="failure view"
@@ -10,6 +10,14 @@
 </template>
 
 <style scoped>
+.failure-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  height: 100vh;
+}
 .failure-image {
   height: 180px;
   width: 250px;
@@ -28,7 +36,7 @@
 }
 @media screen and (min-width: 768px) {
   .failure-heading {
-    font-size: 48px;
+    font-size: 38px;
   }
 }
 </style>

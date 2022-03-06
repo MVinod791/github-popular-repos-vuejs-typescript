@@ -17,37 +17,41 @@ export type ItemData={
 export type State={
     popularRepos:ItemData[],
     loadingStatus:boolean,
+    failureStatus:boolean
 }
 
 const state:State={
     popularRepos:[],
     loadingStatus:false,
+    failureStatus:false
+    
 };
 
 export type Getters={
     allGithubRepos(state:State):void,
     loadingStatus(state:State):void,
+    failureStatus(state:State):void
 }
 
 const getters:Getters={
     allGithubRepos:(state)=>state.popularRepos,
     loadingStatus:(state)=>state.loadingStatus,
+    failureStatus:(state)=>state.failureStatus
 };
 
 const actions={
     async fetchRepos({commit}:any,term:OrderLang){
         try {
             commit('loadingStatus',true)
-            //const response=await fetch('https://apis.ccbp.in/popular-repos')
-            const response=await fetch(`https://apis.ccbp.in/popular-repos?language=${term}`,{
-                method:'GET',
-            })
+            const response=await fetch(`https://apis.ccbp.in/popular-repos?language=${term}`)
             const data=await response.json()
-            //console.log(data)
             commit('setPopularRepos',data.popular_repos)
             commit('loadingStatus',false)
         } catch (error) {
-           console.log(error)
+            console.log(error)
+            commit('failureStatus',error)
+            commit('loadingStatus',false)
+           
         }
         
         
@@ -63,13 +67,18 @@ const actions={
 
 export type Mutations={
     setPopularRepos(state:State,popularRepos:ItemData[]):void
-    loadingStatus(state:State,newLoadingStatus:boolean):void   
+    loadingStatus(state:State,newLoadingStatus:boolean):void  
+    failureStatus(state:State,newErrorStatus:boolean):void 
+    
 }
 
 const mutations:Mutations={
     setPopularRepos:(state,popularRepos)=>state.popularRepos=popularRepos,
     loadingStatus(state,newLoadingStatus){
         state.loadingStatus=newLoadingStatus
+    },
+    failureStatus(state,newErrorStatus){
+        state.failureStatus=newErrorStatus
     }
    
 };
