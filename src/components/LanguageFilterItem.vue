@@ -1,14 +1,17 @@
 <template>
-    <li>
-      <button type="button"  class="button"   @click.prevent="$emit('show-languages',languages.id)">
-          {{languages.language}}
+    <li class="bar">
+      <button type="button"  class="button" :class="{btnActive:isActive===languages.id}"   
+      @click.prevent="$emit('show-languages',languages.id)">
+          {{languages.id}}
       </button>
     </li>
 </template>
 
 <script lang="ts">
-import { defineComponent ,PropType} from 'vue'
+import { computed, defineComponent ,PropType} from 'vue'
 import LanguageFilterData from '../types/LanguageFilterData'
+import store from '@/store'
+import OrderLang from '../types/OrderLang'
 
 export default defineComponent({
     props:{
@@ -16,12 +19,17 @@ export default defineComponent({
             required:true,
             type:Object as PropType<LanguageFilterData>
         },
-        
+
+        isActive:{
+          required:true,
+          type:String as PropType<OrderLang>
+        }
         
     },
     
     setup() {
-             
+
+            
     },
 })
 </script>
@@ -44,10 +52,19 @@ export default defineComponent({
   padding-bottom: 4px;
 }
 
-button:active {
+/* button:active {
   border: 1px solid #0284c7;
   color: #0284c7;
   border-radius: 24px;
+} */
+
+.bar button.btnActive,
+.bar button:focus {
+  border: 1px solid #0284c7;
+  color: #0284c7;
+  border-radius: 24px;
+  outline: none;
 }
+
 
 </style>

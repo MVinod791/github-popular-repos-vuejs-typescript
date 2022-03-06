@@ -3,7 +3,7 @@
       <img
         src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
         alt="failure view"
-        class="failure"
+        class="failure-image"
       />
       <h1 class="failure-heading">Something Went Wrong</h1>
     </div>

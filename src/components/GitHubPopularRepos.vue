@@ -6,17 +6,17 @@
                 <LanguageFilterItem 
                     v-for="languages in languageFiltersData" 
                     :key="languages.id" 
-                    :languages="languages"
-                    
+                    :languages="languages"    
+                    :isActive="isActive"                
                     @show-languages="filterLanguages"
                 />
             </ul>
             <div v-if="loadingStatus" class="loading-div">
                 <LoaderSpinner/>
-            </div>   
+            </div>
             <ul v-else class="repo-list">
-                <li v-for="repos in allGithubRepos" :key="repos">
-                    <RepoItems :repos="repos"/>
+                <li v-for="repos in allGithubRepos" :key="repos.id">
+                    <RepoItems :repos="repos" />
                 </li>
             </ul>
         </div>
@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { computed, defineComponent ,ref} from 'vue'
-import {mapActions} from 'vuex'
+
 import LanguageFilterItem from './LanguageFilterItem.vue'
 import RepoItems from './RepoItems.vue'
 
@@ -37,14 +37,14 @@ import OrderLang  from '../types/OrderLang'
 import store from '@/store'
 
 import LoaderSpinner from './LoaderSpinner.vue'
-import FailureVuew from './FailureView.vue'
+
 
 export default defineComponent({
     name:'GitHubPopularRepos',
     components:{
         LanguageFilterItem,
         RepoItems,
-       LoaderSpinner,FailureVuew
+        LoaderSpinner,
     },
     setup() {
         
@@ -56,13 +56,14 @@ export default defineComponent({
             {id: 'CSS', language: 'CSS'},
         ])       
 
-        const active=ref<boolean>(false)
+        const isActive=ref<string>('ALL')
 
         const filterLanguages=(term:OrderLang)=>{
-            console.log(term)
+            isActive.value=term
             store.dispatch('fetchRepos',term)
-        }        
-
+            
+        }      
+        
         const allGithubRepos=computed(()=>store.getters.allGithubRepos)
 
         const loadingStatus=computed(()=>store.getters.loadingStatus)
@@ -71,7 +72,7 @@ export default defineComponent({
                 store.dispatch('fetchRepos')
         }
 
-        return {languageFiltersData,fetchRepos,allGithubRepos,filterLanguages,loadingStatus}
+        return {languageFiltersData,fetchRepos,allGithubRepos,filterLanguages,loadingStatus,isActive}
     },
     
     created(){

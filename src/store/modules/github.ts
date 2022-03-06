@@ -16,33 +16,40 @@ export type ItemData={
 
 export type State={
     popularRepos:ItemData[],
-    loadingStatus:boolean
+    loadingStatus:boolean,
 }
 
 const state:State={
     popularRepos:[],
-    loadingStatus:false
+    loadingStatus:false,
 };
 
 export type Getters={
     allGithubRepos(state:State):void,
-    loadingStatus(state:State):void
+    loadingStatus(state:State):void,
 }
 
 const getters:Getters={
     allGithubRepos:(state)=>state.popularRepos,
-    loadingStatus:(state)=>state.loadingStatus
+    loadingStatus:(state)=>state.loadingStatus,
 };
 
 const actions={
     async fetchRepos({commit}:any,term:OrderLang){
-        commit('loadingStatus',true)
-        //const response=await fetch('https://apis.ccbp.in/popular-repos')
-        const response=await fetch(`https://apis.ccbp.in/popular-repos?language=${term}`)
-        const data=await response.json()
-        //console.log(data)
-        commit('setPopularRepos',data.popular_repos)
-        commit('loadingStatus',false)
+        try {
+            commit('loadingStatus',true)
+            //const response=await fetch('https://apis.ccbp.in/popular-repos')
+            const response=await fetch(`https://apis.ccbp.in/popular-repos?language=${term}`,{
+                method:'GET',
+            })
+            const data=await response.json()
+            //console.log(data)
+            commit('setPopularRepos',data.popular_repos)
+            commit('loadingStatus',false)
+        } catch (error) {
+           console.log(error)
+        }
+        
         
     },
     // async filterRepos({commit}:any,term:OrderLang){
@@ -56,8 +63,7 @@ const actions={
 
 export type Mutations={
     setPopularRepos(state:State,popularRepos:ItemData[]):void
-    loadingStatus(state:State,newLoadingStatus:boolean):void
-    
+    loadingStatus(state:State,newLoadingStatus:boolean):void   
 }
 
 const mutations:Mutations={
@@ -65,6 +71,7 @@ const mutations:Mutations={
     loadingStatus(state,newLoadingStatus){
         state.loadingStatus=newLoadingStatus
     }
+   
 };
 
 export default({

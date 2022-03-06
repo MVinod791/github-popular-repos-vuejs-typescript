@@ -9,8 +9,6 @@ import { defineComponent } from 'vue';
 import GitHubPopularRepos from './components/GitHubPopularRepos.vue'
 
 
-
-
 export default defineComponent({
   name: 'App',
   components: {
