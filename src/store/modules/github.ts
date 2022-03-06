@@ -49,7 +49,7 @@ const actions={
             commit('loadingStatus',false)
         } catch (error) {
             console.log(error)
-            commit('failureStatus',error)
+            commit('failureStatus',true)
             commit('loadingStatus',false)
            
         }
